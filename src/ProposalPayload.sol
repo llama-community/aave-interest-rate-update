@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity 0.8.17;
 
-import { AaveV2Ethereum } from "@aave-address-book/AaveV2Ethereum.sol";
+import {AaveV2Ethereum} from "@aave-address-book/AaveV2Ethereum.sol";
 
 interface IProposalGenericExecutor {
-  function execute() external;
+    function execute() external;
 }
 
 /**
@@ -15,7 +15,6 @@ interface IProposalGenericExecutor {
  * Snapshot: https://snapshot.org/#/aave.eth/proposal/0xc78b467a96d72ea7af7d2f0ffaa4fb9e66a86f457c3f6a39a9936e6c52be1741
  */
 contract ProposalPayload is IProposalGenericExecutor {
-
     address public constant INTEREST_RATE_STRATEGY = 0x2Cbf7856f51660Aae066afAbaBf9C854FA6BD11f;
     address public constant WETH = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
 

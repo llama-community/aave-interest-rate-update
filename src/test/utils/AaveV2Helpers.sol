@@ -3,8 +3,8 @@ pragma solidity 0.8.17;
 
 import "@forge-std/Vm.sol";
 import "@forge-std/console.sol";
-import { AaveAddressBookV2 } from "@aave-address-book/AaveAddressBook.sol";
-import { TokenData } from "@aave-address-book/AaveV2.sol";
+import {AaveAddressBookV2} from "@aave-address-book/AaveAddressBook.sol";
+import {TokenData} from "@aave-address-book/AaveV2.sol";
 import "@openzeppelin/token/ERC20/IERC20.sol";
 
 struct ReserveTokens {
