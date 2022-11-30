@@ -42,7 +42,7 @@ contract ProposalPayloadE2ETest is Test {
         GovHelpers.passVoteAndExecute(vm, proposalId);
 
         // Post-execution assertations
-        ReserveConfig[] memory allConfigsAfter = AaveV2Helpers._getReservesConfigs(false, MARKET_NAME);
+        ReserveConfig[] memory allConfigs = AaveV2Helpers._getReservesConfigs(false, MARKET_NAME);
 
         ReserveConfig memory expectedConfig = ReserveConfig({
             symbol: "WETH",
@@ -63,7 +63,7 @@ contract ProposalPayloadE2ETest is Test {
             isFrozen: false
         });
 
-        AaveV2Helpers._validateReserveConfig(expectedConfig, allConfigsAfter);
+        AaveV2Helpers._validateReserveConfig(expectedConfig, allConfigs);
 
         AaveV2Helpers._validateInterestRateStrategy(
             WETH,
