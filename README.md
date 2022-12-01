@@ -10,6 +10,24 @@ The Proposal Payload does the following:
 
 The new interest rate strategy is deployed here: https://etherscan.io/address/0x2cbf7856f51660aae066afababf9c854fa6bd11f
 
+The changes are as follows:
+
+```
+==========================================
+| Parameter	      Current (%)	Proposed (%)|
+==========================================
+| Uoptimal	     |   70	     |   80       |
+------------------------------------------
+| Base	         |   0	     |   0        |
+------------------------------------------
+| Slope1	       |   3.0     |   5.75     |
+------------------------------------------
+| Slope2	       |   100	   |   80       |
+------------------------------------------
+| Reserve Factor |   10	     |   15       |
+------------------------------------------
+```
+
 The function used to set the strategy comes from the `@aave-address-book` library
 
 ```
@@ -66,7 +84,7 @@ Duplicate `.env.example` and rename to `.env`:
 
 ### Deploy and Verify
 
-- `make deploy-contracts` - deploy and verify contracts on mainnet
+- `make deploy-payload` - deploy and verify the payload
 - `make deploy-proposal`- deploy proposal on mainnet
 
 To confirm the deploy was successful, re-run your test suite but use the newly created contract address.
