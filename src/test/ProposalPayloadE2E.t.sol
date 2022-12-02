@@ -19,8 +19,12 @@ contract ProposalPayloadE2ETest is Test {
 
     address public constant WETH = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
     address public constant NEW_INTEREST_RATE_STRATEGY = 0x2Cbf7856f51660Aae066afAbaBf9C854FA6BD11f;
+    uint16 public constant RESERVE_FACTOR = 1500;
+
     IReserveInterestRateStrategy public constant OLD_INTEREST_RATE_STRATEGY =
         IReserveInterestRateStrategy(0xEc368D82cb2ad9fc5EfAF823B115A622b52bcD5F);
+
+    IReserveInterestRateStrategy strategy = IReserveInterestRateStrategy(NEW_INTEREST_RATE_STRATEGY);
 
     function setUp() public {
         vm.createSelectFork(vm.rpcUrl("mainnet"));
@@ -79,5 +83,72 @@ contract ProposalPayloadE2ETest is Test {
             }),
             MARKET_NAME
         );
+    }
+
+    function testUtilizationAtZeroPercent() public {
+        _modifyStrategy();
+
+        (uint256 liqRate, uint256 stableRate, uint256 varRate) = strategy.calculateInterestRates(
+            WETH,
+            100 * 1e18,
+            0,
+            0,
+            68200000000000000000000000,
+            RESERVE_FACTOR
+        );
+
+        // At nothing borrowed, liquidity rate should be 0, variable rate should be 0 and stable rate should be 3%.
+        assertEq(liqRate, 0);
+        assertEq(stableRate, 3 * (AaveV2Helpers.RAY / 100));
+        assertEq(varRate, 0);
+    }
+
+    function testUtilizationAtOneHundredPercent() public {
+        _modifyStrategy();
+
+        (uint256 liqRate, uint256 stableRate, uint256 varRate) = strategy.calculateInterestRates(
+            WETH,
+            0,
+            0,
+            100 * 1e18,
+            68200000000000000000000000,
+            RESERVE_FACTOR
+        );
+
+        // At max borrow rate, stable rate should be 107% and variable rate should be 85.75%.
+        assertEq(liqRate, 728875000000000000000000000);
+        assertEq(stableRate, 1070000000000000000000000000);
+        assertEq(varRate, 857500000000000000000000000);
+    }
+
+    function testUtilizationAtUOptimal() public {
+        _modifyStrategy();
+
+        (uint256 liqRate, uint256 stableRate, uint256 varRate) = strategy.calculateInterestRates(
+            WETH,
+            20 * 1e18,
+            0,
+            80 * 1e18,
+            68200000000000000000000000,
+            RESERVE_FACTOR
+        );
+
+        // At UOptimal, stable rate should be 7% and variable rate should be 5.75%.
+        assertEq(liqRate, 39100000000000000000000000);
+        assertEq(stableRate, 7 * (AaveV2Helpers.RAY / 100));
+        assertEq(varRate, 575 * (AaveV2Helpers.RAY / 10000));
+    }
+
+    function _modifyStrategy() internal {
+        payload = new ProposalPayload();
+
+        vm.startPrank(GovHelpers.AAVE_WHALE);
+        uint256 proposalId = DeployMainnetProposal._deployMainnetProposal(
+            address(payload),
+            0xec9d2289ab7db9bfbf2b0f2dd41ccdc0a4003e9e0d09e40dee09095145c63fb5 // TODO: replace with actual ipfs-hash
+        );
+        vm.stopPrank();
+
+        GovHelpers.passVoteAndExecute(vm, proposalId);
     }
 }

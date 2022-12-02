@@ -123,6 +123,22 @@ interface IReserveInterestRateStrategy {
     function variableRateSlope1() external view returns (uint256);
 
     function variableRateSlope2() external view returns (uint256);
+
+    function calculateInterestRates(
+        address reserve,
+        uint256 availableLiquidity,
+        uint256 totalStableDebt,
+        uint256 totalVariableDebt,
+        uint256 averageStableBorrowRate,
+        uint256 reserveFactor
+    )
+        external
+        view
+        returns (
+            uint256,
+            uint256,
+            uint256
+        );
 }
 
 interface IProtocolDataProvider {
