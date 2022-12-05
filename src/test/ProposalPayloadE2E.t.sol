@@ -18,7 +18,7 @@ contract ProposalPayloadE2ETest is Test {
     string internal MARKET_NAME = AaveAddressBookV2.AaveV2Ethereum;
 
     address public constant WETH = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
-    address public constant NEW_INTEREST_RATE_STRATEGY = 0x2Cbf7856f51660Aae066afAbaBf9C854FA6BD11f;
+    address public constant NEW_INTEREST_RATE_STRATEGY = 0x4b8D3277d49E114C8F2D6E0B2eD310e29226fe16;
     uint16 public constant RESERVE_FACTOR = 1500;
 
     IReserveInterestRateStrategy public constant OLD_INTEREST_RATE_STRATEGY =

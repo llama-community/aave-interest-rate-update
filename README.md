@@ -8,7 +8,7 @@ The Proposal Payload does the following:
 
 1. Sets the new interest rate strategy address.
 
-The new interest rate strategy is deployed here: https://etherscan.io/address/0x2cbf7856f51660aae066afababf9c854fa6bd11f
+The new interest rate strategy is deployed here: https://etherscan.io/address/0x4b8D3277d49E114C8F2D6E0B2eD310e29226fe16
 
 The changes are as follows:
 

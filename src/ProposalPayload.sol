@@ -11,7 +11,7 @@ import {AaveV2Ethereum} from "@aave-address-book/AaveV2Ethereum.sol";
  * Snapshot: https://snapshot.org/#/aave.eth/proposal/0xc78b467a96d72ea7af7d2f0ffaa4fb9e66a86f457c3f6a39a9936e6c52be1741
  */
 contract ProposalPayload {
-    address public constant INTEREST_RATE_STRATEGY = 0x2Cbf7856f51660Aae066afAbaBf9C854FA6BD11f;
+    address public constant INTEREST_RATE_STRATEGY = 0x4b8D3277d49E114C8F2D6E0B2eD310e29226fe16;
     address public constant WETH = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
 
     /// @notice The AAVE governance executor calls this function to implement the proposal.
