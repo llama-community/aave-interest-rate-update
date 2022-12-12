@@ -18,7 +18,7 @@ contract ProposalPayloadE2ETest is Test {
     string internal MARKET_NAME = AaveAddressBookV2.AaveV2Ethereum;
 
     address public constant WETH = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
-    address public constant NEW_INTEREST_RATE_STRATEGY = 0x4b8D3277d49E114C8F2D6E0B2eD310e29226fe16;
+    address public constant NEW_INTEREST_RATE_STRATEGY = 0x853844459106feefd8C7C4cC34066bFBC0531722;
     uint16 public constant RESERVE_FACTOR = 1500;
 
     IReserveInterestRateStrategy public constant OLD_INTEREST_RATE_STRATEGY =
@@ -31,19 +31,7 @@ contract ProposalPayloadE2ETest is Test {
     }
 
     function testProposal() public {
-        // 1. Deploy new payload
-        payload = new ProposalPayload();
-
-        // 2. create proposal
-        vm.startPrank(GovHelpers.AAVE_WHALE);
-        uint256 proposalId = DeployMainnetProposal._deployMainnetProposal(
-            address(payload),
-            0xec9d2289ab7db9bfbf2b0f2dd41ccdc0a4003e9e0d09e40dee09095145c63fb5 // TODO: replace with actual ipfs-hash
-        );
-        vm.stopPrank();
-
-        // 3. Execute proposal
-        GovHelpers.passVoteAndExecute(vm, proposalId);
+        _modifyStrategy();
 
         // Post-execution assertations
         ReserveConfig[] memory allConfigs = AaveV2Helpers._getReservesConfigs(false, MARKET_NAME);
@@ -77,7 +65,7 @@ contract ProposalPayloadE2ETest is Test {
                 optimalUtilization: 80 * (AaveV2Helpers.RAY / 100),
                 baseVariableBorrowRate: 0,
                 stableRateSlope1: OLD_INTEREST_RATE_STRATEGY.stableRateSlope1(),
-                stableRateSlope2: OLD_INTEREST_RATE_STRATEGY.stableRateSlope2(),
+                stableRateSlope2: 80 * (AaveV2Helpers.RAY / 100),
                 variableRateSlope1: 575 * (AaveV2Helpers.RAY / 10000),
                 variableRateSlope2: 80 * (AaveV2Helpers.RAY / 100)
             }),
@@ -115,9 +103,9 @@ contract ProposalPayloadE2ETest is Test {
             RESERVE_FACTOR
         );
 
-        // At max borrow rate, stable rate should be 107% and variable rate should be 85.75%.
+        // At max borrow rate, stable rate should be 87% and variable rate should be 85.75%.
         assertEq(liqRate, 728875000000000000000000000);
-        assertEq(stableRate, 1070000000000000000000000000);
+        assertEq(stableRate, 870000000000000000000000000);
         assertEq(varRate, 857500000000000000000000000);
     }
 
@@ -140,8 +128,10 @@ contract ProposalPayloadE2ETest is Test {
     }
 
     function _modifyStrategy() internal {
+        // 1. Deploy new payload
         payload = new ProposalPayload();
 
+        // 2. create proposal
         vm.startPrank(GovHelpers.AAVE_WHALE);
         uint256 proposalId = DeployMainnetProposal._deployMainnetProposal(
             address(payload),
@@ -149,6 +139,7 @@ contract ProposalPayloadE2ETest is Test {
         );
         vm.stopPrank();
 
+        // 3. Execute proposal
         GovHelpers.passVoteAndExecute(vm, proposalId);
     }
 }
