@@ -135,7 +135,7 @@ contract ProposalPayloadE2ETest is Test {
         vm.startPrank(GovHelpers.AAVE_WHALE);
         uint256 proposalId = DeployMainnetProposal._deployMainnetProposal(
             address(payload),
-            0xec9d2289ab7db9bfbf2b0f2dd41ccdc0a4003e9e0d09e40dee09095145c63fb5 // TODO: replace with actual ipfs-hash
+            0x78ce0d63ca0c186ca3f58e712d3f1861ced3dad15ce3ad4f0e005d1663b49caf
         );
         vm.stopPrank();
 
